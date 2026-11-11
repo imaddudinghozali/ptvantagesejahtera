@@ -23,7 +23,11 @@ $user = Auth::user();
             Pantau jadwal, materi pembelajaran, dan tugas Anda dalam antarmuka terpadu.
         </p>
     </div>
-    <div class="d-flex align-items-center gap-2">
+    <div class="d-flex flex-wrap align-items-center gap-2">
+        <a href="<?= e(url('/siswa/meet')) ?>" class="control-capsule-btn" style="border-radius: 9999px;">
+            <span style="width: 7px; height: 7px; border-radius: 50%; background: #059669; box-shadow: 0 0 6px rgba(5, 150, 105, 0.6);"></span>
+            <span>Google Meet</span>
+        </a>
         <a href="<?= e(url('/siswa/mapel')) ?>" class="control-capsule-btn" style="border-radius: 9999px;">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/>
@@ -39,6 +43,48 @@ $user = Auth::user();
         </a>
     </div>
 </div>
+
+<?php if (!empty($meet_aktif)): ?>
+    <?php $meetUtama = $meet_aktif[0]; ?>
+    <div class="card border-0 mb-4 p-3 p-md-3.5"
+         style="border-radius: 22px; background: rgba(255, 255, 255, 0.85); border: 1.5px solid <?= $meetUtama['status'] === 'berlangsung' ? 'rgba(5, 150, 105, 0.35)' : 'rgba(37, 99, 235, 0.25)' ?>; box-shadow: 0 8px 24px rgba(15, 23, 42, 0.04);">
+        <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+            <div class="d-flex align-items-center gap-3">
+                <div class="squircle-icon <?= $meetUtama['status'] === 'berlangsung' ? 'squircle-icon-green' : 'squircle-icon-blue' ?>" style="width: 44px; height: 44px; border-radius: 14px;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M15 10l4.553-2.276A1 1 0 0 1 21 8.618v6.764a1 1 0 0 1-1.447.894L15 14v-4z"/><rect x="3" y="6" width="12" height="12" rx="2" ry="2"/>
+                    </svg>
+                </div>
+                <div>
+                    <div class="d-flex flex-wrap align-items-center gap-2 mb-0.5">
+                        <?php if ($meetUtama['status'] === 'berlangsung'): ?>
+                            <span class="badge bg-success-subtle text-success border border-success-subtle px-2 py-0.5" style="font-size: 0.68rem;">LIVE SEKARANG</span>
+                        <?php else: ?>
+                            <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-2 py-0.5" style="font-size: 0.68rem;">GOOGLE MEET TERJADWAL</span>
+                        <?php endif; ?>
+                        <span class="small fw-bold" style="color: var(--slate-secondary); font-size: 0.76rem;">
+                            <?= e($meetUtama['mapel_nama']) ?> &bull; <?= e(tanggal_id($meetUtama['tanggal'], 'd M Y')) ?> (<?= e(substr((string) $meetUtama['jam_mulai'], 0, 5)) ?>&ndash;<?= e(substr((string) $meetUtama['jam_selesai'], 0, 5)) ?> WIB)
+                        </span>
+                    </div>
+                    <div class="fw-bold" style="color: var(--slate-primary); font-size: 0.96rem;">
+                        <?= e($meetUtama['judul']) ?>
+                        <span class="small fw-normal ms-1" style="color: var(--slate-tertiary);">oleh <?= e($meetUtama['guru_nama']) ?></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex flex-wrap align-items-center gap-2">
+                <a href="<?= e(url('/siswa/meet')) ?>" class="btn btn-sm btn-outline-secondary rounded-pill px-3 py-1.5 fw-semibold">
+                    Semua Jadwal
+                </a>
+                <a href="<?= e($meetUtama['link_meet']) ?>" target="_blank" rel="noopener noreferrer"
+                   class="btn btn-sm <?= $meetUtama['status'] === 'berlangsung' ? 'btn-success' : 'btn-primary' ?> rounded-pill px-3.5 py-1.5 fw-bold shadow-sm">
+                    Gabung Google Meet &nearr;
+                </a>
+            </div>
+        </div>
+    </div>
+<?php endif; ?>
 
 <!-- ==========================================================================
      BARIS 1: GANTT CHART JADWAL (KIRI), STATISTIK ONGOING (TENGAH), VIDEO PREVIEW (KANAN)
@@ -69,54 +115,56 @@ $user = Auth::user();
                 </div>
             </div>
 
-            <!-- Horizontal Gantt Timeline Container -->
-            <div class="p-3 rounded-4 mb-2" style="background: rgba(248, 250, 252, 0.9); border: 1.5px solid rgba(226, 232, 240, 0.9);">
-                <!-- Time Markers Axis -->
-                <div class="d-flex justify-content-between small fw-bold mb-3 pb-2" style="border-bottom: 1.5px dashed rgba(203, 213, 225, 0.8); color: var(--slate-tertiary); font-size: 0.75rem;">
-                    <span>07:00</span>
-                    <span>09:00</span>
-                    <span>11:00</span>
-                    <span>13:00</span>
-                    <span>15:00</span>
-                </div>
-
-                <!-- Gantt Lanes with Dark Capsule Bars & Teacher Avatars -->
-                <div class="d-flex flex-column gap-3">
-                    <!-- Lane 1: Matematika -->
-                    <div class="d-flex align-items-center gap-2">
-                        <span class="small fw-bold text-truncate" style="width: 85px; flex-shrink: 0; color: var(--slate-primary); font-size: 0.78rem;">
-                            Matematika
-                        </span>
-                        <div class="flex-grow-1 position-relative">
-                            <div class="gantt-capsule-bar w-auto" style="margin-left: 6%; max-width: 82%;">
-                                <span>2 Jam &bull; Eksponen & Logaritma</span>
-                                <span class="gantt-avatar-pill" title="Dra. Siti Rahmawati">SR</span>
-                            </div>
-                        </div>
+            <!-- Horizontal Gantt Timeline Container (Fully responsive with touch swipe) -->
+            <div class="gantt-timeline-container p-3 rounded-4 mb-2" style="background: rgba(248, 250, 252, 0.9); border: 1.5px solid rgba(226, 232, 240, 0.9);">
+                <div class="gantt-timeline-inner">
+                    <!-- Time Markers Axis -->
+                    <div class="d-flex justify-content-between small fw-bold mb-3 pb-2" style="border-bottom: 1.5px dashed rgba(203, 213, 225, 0.8); color: var(--slate-tertiary); font-size: 0.75rem;">
+                        <span>07:00</span>
+                        <span>09:00</span>
+                        <span>11:00</span>
+                        <span>13:00</span>
+                        <span>15:00</span>
                     </div>
 
-                    <!-- Lane 2: Fisika -->
-                    <div class="d-flex align-items-center gap-2">
-                        <span class="small fw-bold text-truncate" style="width: 85px; flex-shrink: 0; color: var(--slate-primary); font-size: 0.78rem;">
-                            Fisika
-                        </span>
-                        <div class="flex-grow-1 position-relative">
-                            <div class="gantt-capsule-bar w-auto" style="margin-left: 30%; max-width: 65%; background: #1e293b;">
-                                <span>2 Jam &bull; Gerak Lurus Beraturan</span>
-                                <span class="gantt-avatar-pill" title="Ahmad Fauzi, M.Pd">AF</span>
+                    <!-- Gantt Lanes with Dark Capsule Bars & Teacher Avatars -->
+                    <div class="d-flex flex-column gap-3">
+                        <!-- Lane 1: Matematika -->
+                        <div class="d-flex align-items-center gap-2">
+                            <span class="small fw-bold text-truncate" style="width: 85px; flex-shrink: 0; color: var(--slate-primary); font-size: 0.78rem;">
+                                Matematika
+                            </span>
+                            <div class="flex-grow-1 position-relative">
+                                <div class="gantt-capsule-bar w-auto" style="margin-left: 6%; max-width: 82%;">
+                                    <span>2 Jam &bull; Eksponen & Logaritma</span>
+                                    <span class="gantt-avatar-pill" title="Dra. Siti Rahmawati">SR</span>
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <!-- Lane 3: B. Indonesia -->
-                    <div class="d-flex align-items-center gap-2">
-                        <span class="small fw-bold text-truncate" style="width: 85px; flex-shrink: 0; color: var(--slate-primary); font-size: 0.78rem;">
-                            B. Indonesia
-                        </span>
-                        <div class="flex-grow-1 position-relative">
-                            <div class="gantt-capsule-bar w-auto" style="margin-left: 55%; max-width: 42%;">
-                                <span>1.5 Jam &bull; Teks Laporan Observasi</span>
-                                <span class="gantt-avatar-pill" title="Nurul Hidayah, S.Pd">NH</span>
+                        <!-- Lane 2: Fisika -->
+                        <div class="d-flex align-items-center gap-2">
+                            <span class="small fw-bold text-truncate" style="width: 85px; flex-shrink: 0; color: var(--slate-primary); font-size: 0.78rem;">
+                                Fisika
+                            </span>
+                            <div class="flex-grow-1 position-relative">
+                                <div class="gantt-capsule-bar w-auto" style="margin-left: 30%; max-width: 65%; background: #1e293b;">
+                                    <span>2 Jam &bull; Gerak Lurus Beraturan</span>
+                                    <span class="gantt-avatar-pill" title="Ahmad Fauzi, M.Pd">AF</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Lane 3: B. Indonesia -->
+                        <div class="d-flex align-items-center gap-2">
+                            <span class="small fw-bold text-truncate" style="width: 85px; flex-shrink: 0; color: var(--slate-primary); font-size: 0.78rem;">
+                                B. Indonesia
+                            </span>
+                            <div class="flex-grow-1 position-relative">
+                                <div class="gantt-capsule-bar w-auto" style="margin-left: 55%; max-width: 42%;">
+                                    <span>1.5 Jam &bull; Teks Laporan Observasi</span>
+                                    <span class="gantt-avatar-pill" title="Nurul Hidayah, S.Pd">NH</span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -196,13 +244,12 @@ $user = Auth::user();
 
                 <!-- Video Thumbnail / 3D Wave Visual -->
                 <div class="position-relative rounded-4 overflow-hidden mb-3" style="height: 120px; background: #000000; border: 1px solid rgba(255, 255, 255, 0.2);">
-                    <video id="dashboardMiniVideo" loop playsinline preload="metadata" style="width: 100%; height: 100%; object-fit: cover;" poster="https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&fit=crop&w=600&q=80">
-                        <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4">
-                    </video>
+                    <img src="https://img.youtube.com/vi/-zUmvpkhvW8/hqdefault.jpg" alt="Video Thumbnail"
+                         style="width: 100%; height: 100%; object-fit: cover; opacity: 0.85; transition: transform 0.3s ease;">
                     
                     <div id="dashboardVideoOverlay" class="position-absolute inset-0 d-flex align-items-center justify-content-center"
-                         style="top: 0; left: 0; right: 0; bottom: 0; background: rgba(15, 23, 42, 0.35); cursor: pointer;"
-                         onclick="togglePlayDashboardVideo()">
+                         style="top: 0; left: 0; right: 0; bottom: 0; background: rgba(15, 23, 42, 0.4); cursor: pointer;"
+                         data-bs-toggle="modal" data-bs-target="#fullscreenVideoModal">
                         <div class="rounded-circle d-flex align-items-center justify-content-center"
                              style="width: 44px; height: 44px; background: #ffffff; color: #0f172a; box-shadow: 0 4px 14px rgba(0,0,0,0.4);">
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
@@ -361,7 +408,7 @@ $user = Auth::user();
                     </span>
                 </div>
 
-                <div class="d-flex align-items-center gap-4">
+                <div class="d-flex flex-wrap align-items-center gap-2 gap-sm-4">
                     <div class="d-flex align-items-center gap-2">
                         <span class="small" style="color: #94a3b8; font-size: 0.72rem;">Total Siswa:</span>
                         <strong class="text-white" style="font-size: 0.88rem;">36 Siswa</strong>
@@ -483,55 +530,42 @@ $user = Auth::user();
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
             </div>
 
-            <div class="rounded-4 overflow-hidden mb-3" style="width: 100%; height: 380px; background: #000000; box-shadow: var(--shadow-luxury-card); border: 2px solid #ffffff;">
-                <video id="modalVideoElement" controls playsinline style="width: 100%; height: 100%; object-fit: contain;">
-                    <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4">
-                    Browser tidak mendukung video HTML5.
-                </video>
+            <div class="rounded-4 overflow-hidden mb-3 ratio ratio-16x9" style="background: #000000; box-shadow: var(--shadow-luxury-card); border: 2px solid #ffffff;">
+                <iframe id="modalYoutubeFrame" src="https://www.youtube.com/embed/-zUmvpkhvW8?rel=0" title="Konsep Eksponen & Bentuk Akar"
+                        class="w-100 h-100" style="border: 0;"
+                        referrerpolicy="strict-origin-when-cross-origin"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        allowfullscreen></iframe>
             </div>
 
-            <div class="d-flex justify-content-between align-items-center">
+            <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
                 <span class="small" style="color: var(--slate-tertiary); font-size: 0.78rem;">
                     Pengampu: Dra. Siti Rahmawati &bull; Kualitas Full HD 1080p
                 </span>
-                <button type="button" class="btn btn-outline-secondary btn-sm px-3" data-bs-dismiss="modal" style="border-radius: 9999px; font-weight: 600;">
-                    Tutup Pemutar
-                </button>
+                <div class="d-flex gap-2">
+                    <a href="https://www.youtube.com/watch?v=-zUmvpkhvW8" target="_blank" rel="noopener noreferrer"
+                       class="btn btn-outline-danger btn-sm px-3" style="border-radius: 9999px; font-weight: 600;">
+                        Buka di YouTube &nearr;
+                    </a>
+                    <button type="button" class="btn btn-outline-secondary btn-sm px-3" data-bs-dismiss="modal" style="border-radius: 9999px; font-weight: 600;">
+                        Tutup Pemutar
+                    </button>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
 <script>
-    const miniVideo = document.getElementById('dashboardMiniVideo');
-    const overlay = document.getElementById('dashboardVideoOverlay');
-    const modalVideo = document.getElementById('modalVideoElement');
     const videoModal = document.getElementById('fullscreenVideoModal');
+    const iframeVideo = document.getElementById('modalYoutubeFrame');
 
-    function togglePlayDashboardVideo() {
-        if (!miniVideo) return;
-        if (miniVideo.paused) {
-            miniVideo.play();
-            if (overlay) overlay.style.opacity = '0';
-        } else {
-            miniVideo.pause();
-            if (overlay) overlay.style.opacity = '1';
-        }
-    }
-
-    if (miniVideo) {
-        miniVideo.addEventListener('play', () => { if (overlay) overlay.style.opacity = '0'; });
-        miniVideo.addEventListener('pause', () => { if (overlay) overlay.style.opacity = '1'; });
-    }
-
-    if (videoModal && modalVideo) {
-        videoModal.addEventListener('shown.bs.modal', () => {
-            if (miniVideo && !miniVideo.paused) miniVideo.pause();
-            modalVideo.currentTime = miniVideo ? miniVideo.currentTime : 0;
-            modalVideo.play();
-        });
+    if (videoModal && iframeVideo) {
         videoModal.addEventListener('hidden.bs.modal', () => {
-            modalVideo.pause();
+            // Stop video when modal closes by resetting src
+            const currentSrc = iframeVideo.src;
+            iframeVideo.src = '';
+            iframeVideo.src = currentSrc;
         });
     }
 </script>

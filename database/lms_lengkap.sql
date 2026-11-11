@@ -36,6 +36,7 @@ DROP TABLE IF EXISTS `kalender_akademik`;
 DROP TABLE IF EXISTS `absensi`;
 DROP TABLE IF EXISTS `jadwal`;
 DROP TABLE IF EXISTS `perpustakaan`;
+DROP TABLE IF EXISTS `google_meet`;
 DROP TABLE IF EXISTS `video_pembelajaran`;
 
 -- Hapus tabel lama
@@ -377,6 +378,24 @@ CREATE TABLE `kalender_akademik` (
         REFERENCES `tahun_ajaran` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+CREATE TABLE `google_meet` (
+    `id`           INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `pengampu_id`  INT UNSIGNED NOT NULL,
+    `judul`        VARCHAR(150) NOT NULL,
+    `deskripsi`    TEXT NULL,
+    `link_meet`    VARCHAR(255) NOT NULL,
+    `tanggal`      DATE NOT NULL,
+    `jam_mulai`    TIME NOT NULL,
+    `jam_selesai`  TIME NOT NULL,
+    `status`       ENUM('terjadwal','berlangsung','selesai') NOT NULL DEFAULT 'terjadwal',
+    `created_at`   DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`),
+    KEY `idx_meet_pengampu` (`pengampu_id`),
+    KEY `idx_meet_tanggal` (`tanggal`, `jam_mulai`),
+    CONSTRAINT `fk_meet_pengampu` FOREIGN KEY (`pengampu_id`)
+        REFERENCES `pengampu` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 SET FOREIGN_KEY_CHECKS = 1;
 
 -- =====================================================================
@@ -560,7 +579,8 @@ INSERT INTO `users` (`id`, `nama`, `username`, `password_hash`, `role`, `kelas_i
     (147, 'Diana Purnama',   'siswa.diana',   '$2y$10$oZaBY5JXQeQEC76XKfXk.uA/Pfytr9S0UhR6jSZAx2c7Eu.WVIoHu', 'siswa', 5, 'aktif', '2650007', 'Garut', '2008-06-21', 'Jl. Suherman No. 44', '085712340046', '081390005007'),
     (148, 'Erlangga Saputra','siswa.erlangga','$2y$10$oZaBY5JXQeQEC76XKfXk.uA/Pfytr9S0UhR6jSZAx2c7Eu.WVIoHu', 'siswa', 5, 'aktif', '2650008', 'Bandung', '2008-03-31', 'Perum Nusa Indah C-5', '085712340047', '081390005008'),
     (149, 'Fani Anggraini',  'siswa.fani',    '$2y$10$oZaBY5JXQeQEC76XKfXk.uA/Pfytr9S0UhR6jSZAx2c7Eu.WVIoHu', 'siswa', 5, 'aktif', '2650009', 'Garut', '2008-09-12', 'Jl. Cimanuk No. 120', '085712340048', '081390005009'),
-    (150, 'Gilang Perkasa',  'siswa.gilangp', '$2y$10$oZaBY5JXQeQEC76XKfXk.uA/Pfytr9S0UhR6jSZAx2c7Eu.WVIoHu', 'siswa', 5, 'aktif', '2650010', 'Tasikmalaya', '2008-12-01', 'Kp. Tanjung RT 4/1', '085712340049', '081390005010');
+    (150, 'Gilang Perkasa',  'siswa.gilangp', '$2y$10$oZaBY5JXQeQEC76XKfXk.uA/Pfytr9S0UhR6jSZAx2c7Eu.WVIoHu', 'siswa', 5, 'aktif', '2650010', 'Tasikmalaya', '2008-12-01', 'Kp. Tanjung RT 4/1', '085712340049', '081390005010'),
+    (140, 'Raesa Gista',     'siswa.raesa',   '$2y$10$oZaBY5JXQeQEC76XKfXk.uA/Pfytr9S0UhR6jSZAx2c7Eu.WVIoHu', 'siswa', 5, 'aktif', '2024101201', 'Garut', '2008-05-14', 'Jl. Pembangunan No. 84', '082119882233', '081223344556');
 
 -- Kelas 6: XII-IPS (id 151 - 160)
 INSERT INTO `users` (`id`, `nama`, `username`, `password_hash`, `role`, `kelas_id`, `status`,
@@ -1443,16 +1463,16 @@ INSERT INTO `perpustakaan` (`id`, `judul`, `penulis`, `deskripsi`, `kategori`, `
 -- VIDEO PEMBELAJARAN
 -- =====================================================================
 INSERT INTO `video_pembelajaran` (`pengampu_id`, `judul`, `deskripsi`, `tipe`, `url_embed`, `durasi`, `created_at`) VALUES
-    (1,  'Konsep Bilangan Berpangkat & Bentuk Akar', 'Video penjelasan bilangan berpangkat, sifat-sifat pangkat, dan operasi bentuk akar untuk siswa kelas X.', 'youtube', 'https://www.youtube.com/embed/dQw4w9WgXcQ', '18:45', '2026-08-15 08:00:00'),
-    (1,  'Persamaan dan Pertidaksamaan Linear Satu Variabel', 'Pembahasan lengkap PLSV dan PtLSV disertai contoh soal dan pembahasan.', 'youtube', 'https://www.youtube.com/embed/dQw4w9WgXcQ', '22:30', '2026-08-22 08:00:00'),
-    (4,  'Hukum Newton I, II, dan III Beserta Penerapannya', 'Penjelasan tiga hukum Newton tentang gerak, gaya, dan interaksi benda.', 'youtube', 'https://www.youtube.com/embed/dQw4w9WgXcQ', '25:10', '2026-09-01 08:00:00'),
-    (4,  'Gerak Lurus Beraturan (GLB) dan Berubah Beraturan (GLBB)', 'Konsep GLB & GLBB lengkap dengan grafik dan rumus percepatan.', 'youtube', 'https://www.youtube.com/embed/dQw4w9WgXcQ', '20:00', '2026-09-10 08:00:00'),
-    (2,  'Teks Deskripsi: Struktur dan Kebahasaan', 'Memahami struktur teks deskripsi dan ciri kebahasaannya.', 'youtube', 'https://www.youtube.com/embed/dQw4w9WgXcQ', '15:30', '2026-08-20 08:00:00'),
-    (8,  'Pengantar Algoritma dan Pemrograman Dasar', 'Pengenalan logika algoritma, flowchart, dan pseudocode untuk pemula.', 'youtube', 'https://www.youtube.com/embed/dQw4w9WgXcQ', '30:00', '2026-09-05 08:00:00'),
-    (8,  'HTML & CSS: Membuat Halaman Web Pertamamu', 'Tutorial praktis membuat halaman web sederhana dengan HTML dan CSS.', 'youtube', 'https://www.youtube.com/embed/dQw4w9WgXcQ', '35:20', '2026-09-15 08:00:00'),
-    (3,  'Introduction to English Tenses: Simple Present & Present Continuous', 'Learn the differences between Simple Present and Present Continuous tense with examples.', 'youtube', 'https://www.youtube.com/embed/dQw4w9WgXcQ', '16:45', '2026-08-25 08:00:00'),
-    (21, 'Trigonometri: Perbandingan Trigonometri Segitiga Siku-Siku', 'Konsep sin, cos, tan dan penerapannya pada segitiga siku-siku kelas XI.', 'youtube', 'https://www.youtube.com/embed/dQw4w9WgXcQ', '28:15', '2026-09-12 08:00:00'),
-    (41, 'Gelombang Elektromagnetik dan Spektrumnya', 'Penjelasan sifat gelombang EM, spektrum, dan penerapannya dalam kehidupan sehari-hari.', 'youtube', 'https://www.youtube.com/embed/dQw4w9WgXcQ', '24:30', '2026-09-20 08:00:00');
+    (1,  'Konsep Bilangan Berpangkat & Bentuk Akar', 'Video penjelasan bilangan berpangkat, sifat-sifat pangkat, dan operasi bentuk akar untuk siswa kelas X.', 'youtube', 'https://www.youtube.com/embed/-zUmvpkhvW8', '18:45', '2026-08-15 08:00:00'),
+    (1,  'Persamaan dan Pertidaksamaan Linear Satu Variabel', 'Pembahasan lengkap PLSV dan PtLSV disertai contoh soal dan pembahasan.', 'youtube', 'https://www.youtube.com/embed/NybHckSEQBI', '22:30', '2026-08-22 08:00:00'),
+    (4,  'Hukum Newton I, II, dan III Beserta Penerapannya', 'Penjelasan tiga hukum Newton tentang gerak, gaya, dan interaksi benda.', 'youtube', 'https://www.youtube.com/embed/kKKM8Y-u7ds', '25:10', '2026-09-01 08:00:00'),
+    (4,  'Gerak Lurus Beraturan (GLB) dan Berubah Beraturan (GLBB)', 'Konsep GLB & GLBB lengkap dengan grafik dan rumus percepatan.', 'youtube', 'https://www.youtube.com/embed/ZM8ECpBuQYE', '20:00', '2026-09-10 08:00:00'),
+    (2,  'Teks Deskripsi: Struktur dan Kebahasaan', 'Memahami struktur teks deskripsi dan ciri kebahasaannya.', 'youtube', 'https://www.youtube.com/embed/NBZ9Ro6UKV8', '15:30', '2026-08-20 08:00:00'),
+    (8,  'Pengantar Algoritma dan Pemrograman Dasar', 'Pengenalan logika algoritma, flowchart, dan pseudocode untuk pemula.', 'youtube', 'https://www.youtube.com/embed/rL8X2mlNHPM', '30:00', '2026-09-05 08:00:00'),
+    (8,  'HTML & CSS: Membuat Halaman Web Pertamamu', 'Tutorial praktis membuat halaman web sederhana dengan HTML dan CSS.', 'youtube', 'https://www.youtube.com/embed/NBZ9Ro6UKV8', '35:20', '2026-09-15 08:00:00'),
+    (3,  'Introduction to English Tenses: Simple Present & Present Continuous', 'Learn the differences between Simple Present and Present Continuous tense with examples.', 'youtube', 'https://www.youtube.com/embed/84jVz0D-KkY', '16:45', '2026-08-25 08:00:00'),
+    (21, 'Trigonometri: Perbandingan Trigonometri Segitiga Siku-Siku', 'Konsep sin, cos, tan dan penerapannya pada segitiga siku-siku kelas XI.', 'youtube', 'https://www.youtube.com/embed/PUB0TaZ7bhA', '28:15', '2026-09-12 08:00:00'),
+    (41, 'Gelombang Elektromagnetik dan Spektrumnya', 'Penjelasan sifat gelombang EM, spektrum, dan penerapannya dalam kehidupan sehari-hari.', 'youtube', 'https://www.youtube.com/embed/IRBfpBPELmE', '24:30', '2026-09-20 08:00:00');
 
 -- =====================================================================
 -- PENGUMUMAN
@@ -1522,6 +1542,18 @@ INSERT INTO `pencapaian` (`siswa_id`, `tipe`, `label`, `deskripsi`, `ikon`, `dip
     (141, 'tepat_waktu',   'Pengumpul Tepat Waktu', 'Mengumpulkan seluruh laporan praktikum tepat waktu', '⏰', '2026-10-17 09:15:00'),
     (141, 'nilai_sempurna', 'Nilai Sempurna', 'Mendapatkan nilai 100 pada kuis Fisika Modern XII-IPA', '💯', '2026-10-12 08:35:00'),
     (143, 'rajin_kuis',    'Rajin Latihan', 'Telah mengerjakan seluruh kuis persiapan ujian', '📝', '2026-10-21 10:00:00');
+
+-- =====================================================================
+-- GOOGLE MEET (SESI TATAP MUKA DARING)
+-- =====================================================================
+INSERT INTO `google_meet` (`pengampu_id`, `judul`, `deskripsi`, `link_meet`, `tanggal`, `jam_mulai`, `jam_selesai`, `status`) VALUES
+    (38, 'Klinik Soal Persiapan Ujian Akhir: Integral & Limit', 'Pembahasan soal HOTS limit fungsi trigonometri dan integral tentu bersama Bu Siti. Siapkan buku latihan.', 'https://meet.google.com/sman-xipa-mtk', '2026-11-12', '08:00:00', '09:30:00', 'berlangsung'),
+    (40, 'Academic Speaking Practice: Analytical Exposition Debate', 'Simulasi argumen tim pro & kontra serta review tata bahasa sebelum penilaian lisan pekan depan.', 'https://meet.google.com/bing-xipa-deb', '2026-11-13', '10:00:00', '11:30:00', 'terjadwal'),
+    (41, 'Bedah Materi Gelombang Elektromagnetik & Induksi Faraday', 'Sesi tanya jawab konsep gaya gerak listrik induksi beserta simulasi PhET virtual.', 'https://meet.google.com/fis-xipa-gel', '2026-11-10', '07:30:00', '09:00:00', 'selesai'),
+    (28, 'Workshop Basis Data Relasional & Normalisasi Tabel MySQL', 'Praktik langsung merancang ERD hingga 3NF menggunakan studi kasus sistem akademik sekolah.', 'https://meet.google.com/info-xiipa-db', '2026-11-12', '09:00:00', '10:30:00', 'berlangsung'),
+    (26, 'Diskusi Interaktif Mekanisme Transpor Membran Sel', 'Review hasil pengamatan difusi-osmosis dan kuis interaktif singkat via Google Meet.', 'https://meet.google.com/bio-xiipa-sel', '2026-11-14', '13:00:00', '14:15:00', 'terjadwal'),
+    (1,  'Pendalaman Konsep Bilangan Berpangkat & Bentuk Akar', 'Penjelasan sifat eksponen pecahan dan latihan merasionalkan penyebut secara langsung.', 'https://meet.google.com/mtk-xone-exp', '2026-11-12', '10:30:00', '12:00:00', 'berlangsung'),
+    (4,  'Pembahasan Soal Gerak Lurus Berubah Beraturan (GLBB)', 'Analisis grafik v-t dan penerapan hukum Newton pada bidang miring.', 'https://meet.google.com/fis-xone-glb', '2026-11-13', '08:30:00', '10:00:00', 'terjadwal');
 
 -- =====================================================================
 -- Selesai. Seluruh data skema, guru, siswa, presensi, dan kuis telah dimuat.

@@ -26,6 +26,7 @@ $cssVer  = is_file($cssPath) ? filemtime($cssPath) : time();
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
     <meta name="csrf-token" content="<?= e(Csrf::token()) ?>">
     <meta name="theme-color" content="#edf2f7">
     <title><?= e($judul ?? Config::get('app.nama')) ?></title>
@@ -134,11 +135,11 @@ $cssVer  = is_file($cssPath) ? filemtime($cssPath) : time();
     <!-- ── RIGHT CONTENT (Area Konten & Topbar Kapsul Melayang) ─────────────── -->
     <div class="spatial-main-wrapper <?= $user === null ? 'spatial-main-full' : '' ?>">
         <!-- Floating Pill Topbar (Matching the Reference Image Controls) -->
-        <header class="spatial-topbar d-flex flex-wrap align-items-center justify-content-between gap-3">
+        <header class="spatial-topbar d-flex flex-wrap align-items-center justify-content-between gap-2 gap-sm-3">
             <!-- Left Side: Title & Date Selector -->
-            <div class="d-flex align-items-center gap-3">
+            <div class="d-flex align-items-center gap-2 gap-sm-3 overflow-hidden">
                 <?php if ($user !== null): ?>
-                    <button class="btn btn-sm spatial-mobile-toggle d-lg-none" type="button"
+                    <button class="btn btn-sm spatial-mobile-toggle d-lg-none flex-shrink-0" type="button"
                             onclick="document.getElementById('sidebarMenu').classList.add('show'); document.getElementById('sidebarBackdrop').classList.add('show');"
                             aria-label="Buka Menu">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -149,8 +150,8 @@ $cssVer  = is_file($cssPath) ? filemtime($cssPath) : time();
                     </button>
                 <?php endif; ?>
                 
-                <div>
-                    <h1 class="h4 fw-bold mb-0" style="color: var(--slate-primary); letter-spacing: -0.02em;">
+                <div class="overflow-hidden">
+                    <h1 class="h5 fw-bold mb-0 text-truncate" style="color: var(--slate-primary); letter-spacing: -0.02em;">
                         <?= e($judul ?? Config::get('app.nama')) ?>
                     </h1>
                 </div>
@@ -176,16 +177,34 @@ $cssVer  = is_file($cssPath) ? filemtime($cssPath) : time();
             </div>
 
             <!-- Right Side: Floating Control Capsules -->
-            <div class="d-flex align-items-center gap-2">
-                <!-- Video Call / Pembelajaran Pill (Dark Capsule like image) -->
+            <div class="d-flex align-items-center gap-2 flex-shrink-0">
+                <!-- Live Meet / Video Materi Pill (Dark Capsule) -->
                 <?php if ($user !== null): ?>
-                    <a href="<?= e(url('/' . ($peran ?? 'siswa') . '/video')) ?>" class="control-capsule-btn control-capsule-dark d-none d-sm-inline-flex" title="Video Pembelajaran">
-                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polygon points="23 7 16 12 23 17 23 7"/>
-                            <rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>
-                        </svg>
-                        <span>Video Materi</span>
+                    <?php
+                    $topMeetPath = match ($peran ?? 'siswa') {
+                        'admin' => '/admin/meet',
+                        'guru'  => '/guru/meet',
+                        default => '/siswa/meet',
+                    };
+                    $topVideoPath = match ($peran ?? 'siswa') {
+                        'admin' => '/admin/jadwal',
+                        'guru'  => '/guru/video',
+                        default => '/siswa/video',
+                    };
+                    ?>
+                    <a href="<?= e(url($topMeetPath)) ?>" class="control-capsule-btn d-none d-lg-inline-flex" title="Ruang Google Meet">
+                        <span style="width: 7px; height: 7px; border-radius: 50%; background: #059669; box-shadow: 0 0 6px rgba(5,150,105,0.6);"></span>
+                        <span>Google Meet</span>
                     </a>
+                    <?php if (($peran ?? '') !== 'admin'): ?>
+                        <a href="<?= e(url($topVideoPath)) ?>" class="control-capsule-btn control-capsule-dark d-none d-md-inline-flex" title="Video Pembelajaran">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polygon points="23 7 16 12 23 17 23 7"/>
+                                <rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>
+                            </svg>
+                            <span>Video Materi</span>
+                        </a>
+                    <?php endif; ?>
                 <?php endif; ?>
 
                 <!-- Time & Weather Widget Capsule -->
