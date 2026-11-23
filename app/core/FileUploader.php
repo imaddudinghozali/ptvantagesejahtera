@@ -30,14 +30,31 @@ final class FileUploader
         'jpg'  => ['image/jpeg'],
         'jpeg' => ['image/jpeg'],
         'png'  => ['image/png'],
+        'webp' => ['image/webp'],
+        'epub' => ['application/epub+zip', 'application/zip', 'application/octet-stream'],
+        'mp4'  => ['video/mp4'],
     ];
 
     private string $direktori;
     private int $maksByte;
+    /** @var list<string>|null */
+    private ?array $ekstensiKustom = null;
 
-    public function __construct(?string $direktori = null, ?int $maksByte = null)
+    /**
+     * @param string|array<string>|null $direktoriAtauEkstensi Direktori atau daftar ekstensi yang diizinkan.
+     * @param int|null $maksByte Batas ukuran berkas dalam byte.
+     * @param string|null $direktori Direktori jika argumen pertama adalah array ekstensi.
+     */
+    public function __construct(string|array|null $direktoriAtauEkstensi = null, ?int $maksByte = null, ?string $direktori = null)
     {
-        $this->direktori = $direktori ?? (string) Config::get('app.upload_dir', __DIR__ . '/../../uploads');
+        if (is_array($direktoriAtauEkstensi)) {
+            $this->ekstensiKustom = array_values(array_map('strtolower', $direktoriAtauEkstensi));
+            $this->direktori = $direktori ?? (string) Config::get('app.upload_dir', __DIR__ . '/../../uploads');
+        } else {
+            $this->ekstensiKustom = null;
+            $this->direktori = $direktoriAtauEkstensi ?? (string) Config::get('app.upload_dir', __DIR__ . '/../../uploads');
+        }
+
         $this->maksByte  = $maksByte ?? (int) Config::get('app.upload_max', 10 * 1024 * 1024);
     }
 
@@ -48,7 +65,7 @@ final class FileUploader
 
     public function daftarEkstensi(): string
     {
-        return implode(', ', array_keys(self::DIIZINKAN));
+        return implode(', ', $this->ekstensiKustom ?? array_keys(self::DIIZINKAN));
     }
 
     /**
@@ -66,7 +83,9 @@ final class FileUploader
         $tmp      = (string) $berkas['tmp_name'];
         $ekstensi = strtolower(pathinfo($asli, PATHINFO_EXTENSION));
 
-        if (!isset(self::DIIZINKAN[$ekstensi])) {
+        $diizinkan = $this->ekstensiKustom ?? array_keys(self::DIIZINKAN);
+
+        if (!in_array($ekstensi, $diizinkan, true) || !isset(self::DIIZINKAN[$ekstensi])) {
             throw new BerkasTidakValid(
                 'Format berkas tidak diizinkan. Gunakan: ' . $this->daftarEkstensi() . '.'
             );

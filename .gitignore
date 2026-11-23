@@ -1,5 +1,12 @@
 /vendor/
+/node_modules/
+/cypress/videos/
+/cypress/screenshots/
+/uploads/*
+!/uploads/.gitkeep
 composer.lock
 *.log
 .DS_Store
 Thumbs.db
+app.zip
+test.pdf

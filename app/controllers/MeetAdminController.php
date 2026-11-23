@@ -37,3 +37,4 @@ final class MeetAdminController extends Controller
         redirect('/admin/meet');
     }
 }
+

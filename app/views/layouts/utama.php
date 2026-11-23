@@ -105,9 +105,13 @@ $cssVer  = is_file($cssPath) ? filemtime($cssPath) : time();
         <!-- 3. Pinned Footer Profile & Logout (Inside Sidebar Bottom) -->
         <div class="spatial-sidebar-footer">
             <div class="d-flex align-items-center gap-2 p-2 rounded-4" style="background: rgba(255, 255, 255, 0.8); border: 1.5px solid rgba(255, 255, 255, 0.9); box-shadow: 0 4px 12px rgba(15, 23, 42, 0.03);">
-                <div class="spatial-user-avatar" style="width: 34px; height: 34px; border-radius: 50%; font-size: 0.82rem; background: #0f172a; color: #ffffff; flex-shrink: 0;">
-                    <?= strtoupper(substr((string) ($user['nama'] ?? 'U'), 0, 1)) ?>
-                </div>
+                <?php if (!empty($user['foto'])): ?>
+                    <img src="<?= e(url('/profil/foto/' . $user['id'])) ?>" alt="Foto Profil" style="width: 34px; height: 34px; border-radius: 50%; object-fit: cover; flex-shrink: 0; border: 1.5px solid rgba(15, 23, 42, 0.1);">
+                <?php else: ?>
+                    <div class="spatial-user-avatar" style="width: 34px; height: 34px; border-radius: 50%; font-size: 0.82rem; background: #0f172a; color: #ffffff; flex-shrink: 0;">
+                        <?= strtoupper(substr((string) ($user['nama'] ?? 'U'), 0, 1)) ?>
+                    </div>
+                <?php endif; ?>
                 <div class="overflow-hidden flex-grow-1">
                     <div class="small fw-bold text-truncate" style="color: var(--slate-primary); font-size: 0.78rem;">
                         <?= e($user['nama'] ?? '-') ?>
@@ -238,10 +242,14 @@ $cssVer  = is_file($cssPath) ? filemtime($cssPath) : time();
                 <?php if ($user !== null): ?>
                     <div class="dropdown">
                         <button class="control-capsule-btn dropdown-toggle border-0" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <span class="d-inline-flex align-items-center justify-content-center rounded-circle text-white fw-bold"
-                                  style="width: 22px; height: 22px; background: #0f172a; font-size: 0.65rem;">
-                                <?= strtoupper(substr((string) ($user['nama'] ?? 'U'), 0, 1)) ?>
-                            </span>
+                            <?php if (!empty($user['foto'])): ?>
+                                <img src="<?= e(url('/profil/foto/' . $user['id'])) ?>" alt="Foto" style="width: 22px; height: 22px; border-radius: 50%; object-fit: cover; flex-shrink: 0;">
+                            <?php else: ?>
+                                <span class="d-inline-flex align-items-center justify-content-center rounded-circle text-white fw-bold"
+                                      style="width: 22px; height: 22px; background: #0f172a; font-size: 0.65rem;">
+                                    <?= strtoupper(substr((string) ($user['nama'] ?? 'U'), 0, 1)) ?>
+                                </span>
+                            <?php endif; ?>
                             <span class="d-none d-sm-inline fw-semibold"><?= e(explode(' ', (string) ($user['nama'] ?? 'User'))[0]) ?></span>
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 p-2" style="border-radius: 20px; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(20px);">

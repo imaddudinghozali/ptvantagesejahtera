@@ -154,3 +154,4 @@ final class MeetGuruController extends Controller
         redirect('/guru/meet');
     }
 }
+

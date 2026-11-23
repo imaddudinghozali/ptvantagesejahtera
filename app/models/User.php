@@ -25,7 +25,7 @@ final class User extends Model
     public function cariAktifDenganId(int $id): ?array
     {
         return $this->satu(
-            'SELECT id, nama, username, password_hash, role, kelas_id, status
+            'SELECT id, nama, username, password_hash, role, kelas_id, status, foto
                FROM users
               WHERE id = ? AND status = ?
               LIMIT 1',
@@ -36,8 +36,9 @@ final class User extends Model
     public function cariDenganId(int $id): ?array
     {
         return $this->satu(
-            'SELECT u.id, u.nama, u.username, u.role, u.kelas_id, u.status, u.created_at,
-                    k.nama AS kelas_nama
+            'SELECT u.id, u.nama, u.username, u.role, u.kelas_id, u.status, u.foto,
+                    u.nomor_induk, u.tempat_lahir, u.tanggal_lahir, u.alamat, u.no_hp, u.no_hp_ortu,
+                    u.created_at, k.nama AS kelas_nama
                FROM users u
           LEFT JOIN kelas k ON k.id = u.kelas_id
               WHERE u.id = ?
