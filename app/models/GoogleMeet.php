@@ -221,3 +221,4 @@ final class GoogleMeet extends Model
         return $path !== '' ? $path : 'meet.google.com';
     }
 }
+

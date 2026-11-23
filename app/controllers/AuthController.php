@@ -120,7 +120,11 @@ final class AuthController extends Controller
         if (($_FILES['foto']['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_NO_FILE) {
             $uploader = new \App\Core\FileUploader(['jpg', 'jpeg', 'png', 'webp'], 5 * 1024 * 1024);
             try {
-                $berkas = $uploader->simpan($_FILES['foto']);
+                $userLama = $model->cariDenganId($id);
+                $berkas   = $uploader->simpan($_FILES['foto']);
+                if (!empty($userLama['foto'])) {
+                    $uploader->hapus((string) $userLama['foto']);
+                }
                 $model->gantiFoto($id, $berkas['nama']);
             } catch (\App\Core\BerkasTidakValid $e) {
                 Flash::error('Foto gagal diunggah: ' . $e->getMessage());
@@ -140,7 +144,7 @@ final class AuthController extends Controller
             throw HttpException::tidakAda('Foto tidak ditemukan.');
         }
 
-        (new \App\Core\FileDownloader())->tampil((string) $user['foto'], 'foto.jpg');
+        (new \App\Core\FileDownloader())->tampil((string) $user['foto'], (string) $user['foto']);
     }
 
     public function formPassword(): void

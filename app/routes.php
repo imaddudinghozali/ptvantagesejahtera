@@ -178,3 +178,10 @@ $router->get('/siswa/kuis/hasil/{id}',    'KuisSiswaController@hasil',    ['sisw
 
 $router->get('/siswa/nilai',      'NilaiSiswaController@index',      ['siswa']);
 $router->get('/siswa/pengumuman', 'PengumumanSiswaController@index', ['siswa']);
+
+// --- REST API Endpoints (Automation & Integration) ------------------------
+$router->get('/api/status',           'ApiController@status',       ['*']);
+$router->get('/api/meet/aktif',       'ApiController@meetAktif',    ['*']);
+$router->get('/api/leaderboard/{id}', 'ApiController@leaderboard',  ['*']);
+$router->get('/api/perpustakaan',     'ApiController@perpustakaan', ['*']);
+$router->get('/api/jadwal/{id}',      'ApiController@jadwal',       ['*']);

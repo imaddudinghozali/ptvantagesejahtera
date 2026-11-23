@@ -1,0 +1,28 @@
+{
+  "name": "ptvantagesejahtera-main",
+  "version": "1.0.0",
+  "description": "Platform **Learning Management System (LMS)** modern, aman, dan berorientasi *User Experience* tinggi untuk SMAN 10 Garut. Menyatukan ruang belajar digital, materi modul, penugasan berbatas waktu, kuis online otomatis, video interaktif, presensi kehadiran, e-perpustakaan, serta buku nilai analitik dengan visualisasi grafik interaktif dalam estetika *Subtle Glassmorphism*.",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs",
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Yunusfahreza/ptvantagesejahtera.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Yunusfahreza/ptvantagesejahtera/issues"
+  },
+  "homepage": "https://github.com/Yunusfahreza/ptvantagesejahtera#readme",
+  "devDependencies": {
+    "cypress": "^16.3.0"
+  }
+}

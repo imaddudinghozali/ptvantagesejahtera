@@ -23,12 +23,6 @@
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
-CREATE DATABASE IF NOT EXISTS `lms_sma`
-    DEFAULT CHARACTER SET utf8mb4
-    DEFAULT COLLATE utf8mb4_unicode_ci;
-
-USE `lms_sma`;
-
 -- Hapus tabel fitur baru dulu (urut dependensi)
 DROP TABLE IF EXISTS `catatan_siswa`;
 DROP TABLE IF EXISTS `pencapaian`;
@@ -567,7 +561,7 @@ INSERT INTO `users` (`id`, `nama`, `username`, `password_hash`, `role`, `kelas_i
     (139, 'Intan Permatasari','siswa.intan',   '$2y$10$oZaBY5JXQeQEC76XKfXk.uA/Pfytr9S0UhR6jSZAx2c7Eu.WVIoHu', 'siswa', 4, 'aktif', '2640009', 'Garut', '2009-12-05', 'Kp. Sukadana RT 2/7', '085712340058', '081390004009'),
     (140, 'Joko Susanto',     'siswa.joko',    '$2y$10$oZaBY5JXQeQEC76XKfXk.uA/Pfytr9S0UhR6jSZAx2c7Eu.WVIoHu', 'siswa', 4, 'aktif', '2640010', 'Bandung', '2009-03-22', 'Jl. Bratayuda No. 80', '085712340059', '081390004010');
 
--- Kelas 5: XII-IPA (id 141 - 150)
+-- Kelas 5: XII-IPA (id 141 - 150, 161)
 INSERT INTO `users` (`id`, `nama`, `username`, `password_hash`, `role`, `kelas_id`, `status`,
                       `nomor_induk`, `tempat_lahir`, `tanggal_lahir`, `alamat`, `no_hp`, `no_hp_ortu`) VALUES
     (141, 'Xena Olivia',     'siswa.xena',    '$2y$10$oZaBY5JXQeQEC76XKfXk.uA/Pfytr9S0UhR6jSZAx2c7Eu.WVIoHu', 'siswa', 5, 'aktif', '2650001', 'Garut', '2008-05-18', 'Jl. Karacak No. 14', '085712340040', '081390005001'),
@@ -580,7 +574,7 @@ INSERT INTO `users` (`id`, `nama`, `username`, `password_hash`, `role`, `kelas_i
     (148, 'Erlangga Saputra','siswa.erlangga','$2y$10$oZaBY5JXQeQEC76XKfXk.uA/Pfytr9S0UhR6jSZAx2c7Eu.WVIoHu', 'siswa', 5, 'aktif', '2650008', 'Bandung', '2008-03-31', 'Perum Nusa Indah C-5', '085712340047', '081390005008'),
     (149, 'Fani Anggraini',  'siswa.fani',    '$2y$10$oZaBY5JXQeQEC76XKfXk.uA/Pfytr9S0UhR6jSZAx2c7Eu.WVIoHu', 'siswa', 5, 'aktif', '2650009', 'Garut', '2008-09-12', 'Jl. Cimanuk No. 120', '085712340048', '081390005009'),
     (150, 'Gilang Perkasa',  'siswa.gilangp', '$2y$10$oZaBY5JXQeQEC76XKfXk.uA/Pfytr9S0UhR6jSZAx2c7Eu.WVIoHu', 'siswa', 5, 'aktif', '2650010', 'Tasikmalaya', '2008-12-01', 'Kp. Tanjung RT 4/1', '085712340049', '081390005010'),
-    (140, 'Raesa Gista',     'siswa.raesa',   '$2y$10$oZaBY5JXQeQEC76XKfXk.uA/Pfytr9S0UhR6jSZAx2c7Eu.WVIoHu', 'siswa', 5, 'aktif', '2024101201', 'Garut', '2008-05-14', 'Jl. Pembangunan No. 84', '082119882233', '081223344556');
+    (161, 'Raesa Gista',     'siswa.raesa',   '$2y$10$oZaBY5JXQeQEC76XKfXk.uA/Pfytr9S0UhR6jSZAx2c7Eu.WVIoHu', 'siswa', 5, 'aktif', '2024101201', 'Garut', '2008-05-14', 'Jl. Pembangunan No. 84', '082119882233', '081223344556');
 
 -- Kelas 6: XII-IPS (id 151 - 160)
 INSERT INTO `users` (`id`, `nama`, `username`, `password_hash`, `role`, `kelas_id`, `status`,
@@ -991,7 +985,7 @@ INSERT INTO `absensi` (`pengampu_id`, `siswa_id`, `tanggal`, `status`, `keterang
     (31, 139, '2026-10-06', 'hadir', NULL), (31, 140, '2026-10-06', 'hadir', NULL);
 
 -- -------------------------------------------------------------
--- PENGAMPU 38: MTK XII-IPA (Guru: Siti Rahmawati) — Siswa 141 - 150
+-- PENGAMPU 38: MTK XII-IPA (Guru: Siti Rahmawati) — Siswa 141 - 150, 161
 -- -------------------------------------------------------------
 -- Pertemuan 1: 2026-09-08
 INSERT INTO `absensi` (`pengampu_id`, `siswa_id`, `tanggal`, `status`, `keterangan`) VALUES
@@ -999,7 +993,8 @@ INSERT INTO `absensi` (`pengampu_id`, `siswa_id`, `tanggal`, `status`, `keterang
     (38, 143, '2026-09-08', 'hadir', NULL), (38, 144, '2026-09-08', 'hadir', NULL),
     (38, 145, '2026-09-08', 'hadir', NULL), (38, 146, '2026-09-08', 'hadir', NULL),
     (38, 147, '2026-09-08', 'hadir', NULL), (38, 148, '2026-09-08', 'hadir', NULL),
-    (38, 149, '2026-09-08', 'hadir', NULL), (38, 150, '2026-09-08', 'hadir', NULL);
+    (38, 149, '2026-09-08', 'hadir', NULL), (38, 150, '2026-09-08', 'hadir', NULL),
+    (38, 161, '2026-09-08', 'hadir', NULL);
 
 -- Pertemuan 2: 2026-10-06
 INSERT INTO `absensi` (`pengampu_id`, `siswa_id`, `tanggal`, `status`, `keterangan`) VALUES
@@ -1008,7 +1003,8 @@ INSERT INTO `absensi` (`pengampu_id`, `siswa_id`, `tanggal`, `status`, `keterang
     (38, 145, '2026-10-06', 'izin',  'Bimbingan belajar UTBK'),
     (38, 146, '2026-10-06', 'hadir', NULL), (38, 147, '2026-10-06', 'hadir', NULL),
     (38, 148, '2026-10-06', 'hadir', NULL), (38, 149, '2026-10-06', 'hadir', NULL),
-    (38, 150, '2026-10-06', 'hadir', NULL);
+    (38, 150, '2026-10-06', 'hadir', NULL),
+    (38, 161, '2026-10-06', 'hadir', NULL);
 
 -- -------------------------------------------------------------
 -- PENGAMPU 48: MTK XII-IPS (Guru: Slamet Wahyudi) — Siswa 151 - 160
@@ -1182,7 +1178,8 @@ INSERT INTO `hasil_kuis` (`id`, `kuis_id`, `siswa_id`, `nilai`, `mulai_at`, `sel
     (53, 8, 147, 100.00, '2026-10-12 08:04:00', '2026-10-12 08:31:00'),
     (54, 8, 148,  80.00, '2026-10-12 08:14:00', '2026-10-12 08:41:00'),
     (55, 8, 149,  80.00, '2026-10-12 08:11:00', '2026-10-12 08:39:00'),
-    (56, 8, 150,  60.00, '2026-10-12 08:18:00', '2026-10-12 08:50:00');
+    (56, 8, 150,  60.00, '2026-10-12 08:18:00', '2026-10-12 08:50:00'),
+    (57, 8, 161, 100.00, '2026-10-12 08:01:00', '2026-10-12 08:20:00');
 
 -- -------------------------------------------------------------
 -- JAWABAN KUIS MASING-MASING SISWA
@@ -1271,7 +1268,9 @@ INSERT INTO `jawaban_kuis` (`hasil_kuis_id`, `soal_id`, `jawaban`) VALUES
     (53, 36, 'a'), (53, 37, 'a'), (53, 38, 'a'), (53, 39, 'a'), (53, 40, 'a'),
     (54, 36, 'a'), (54, 37, 'a'), (54, 38, 'a'), (54, 39, 'c'), (54, 40, 'a'),
     (55, 36, 'a'), (55, 37, 'c'), (55, 38, 'a'), (55, 39, 'a'), (55, 40, 'a'),
-    (56, 36, 'b'), (56, 37, 'a'), (56, 38, 'b'), (56, 39, 'a'), (56, 40, 'a');
+    (56, 36, 'b'), (56, 37, 'a'), (56, 38, 'b'), (56, 39, 'a'), (56, 40, 'a'),
+    -- Hasil 57 (Raesa Gista - Kuis 8: Nilai 100)
+    (57, 36, 'a'), (57, 37, 'a'), (57, 38, 'a'), (57, 39, 'a'), (57, 40, 'a');
 
 -- =====================================================================
 -- MATERI PEMBELAJARAN (10 Modul Pembelajaran Berformat PDF)
@@ -1349,7 +1348,12 @@ INSERT INTO `tugas` (`id`, `pengampu_id`, `judul`, `deskripsi`, `lampiran`, `lam
     (6, 21, 'Latihan Soal Trigonometri Analitik Kelas XI',
      'Selesaikan 5 soal pembuktian identitas trigonometri pada lembar kerja terlampir.',
      'c81e728d9d4c2f636f067f89cc14862c.pdf', 'Lembar_Kerja_Trigonometri_XI.pdf',
-     '2026-11-22 23:59:00', '2026-10-14 09:00:00');
+     '2026-11-22 23:59:00', '2026-10-14 09:00:00'),
+
+    (7, 38, 'Tugas Mandiri Analisis Matriks Transformasi Kelas XII',
+     'Kerjakan analisis matriks rotasi dan transformasi geometri pada lembar kerja terlampir.',
+     '36ad90198debe9d5e3148f4b782a718a.pdf', 'Lembar_Kerja_Matriks_XII.pdf',
+     '2026-11-20 23:59:00', '2026-10-10 08:00:00');
 
 -- =====================================================================
 -- PENGUMPULAN TUGAS (Dengan Penilaian & Komentar Feedback Guru)
@@ -1383,7 +1387,10 @@ INSERT INTO `pengumpulan` (`id`, `tugas_id`, `siswa_id`, `file`, `file_asli`, `d
      '2026-10-18 16:30:00', 'tepat_waktu', 95.00, 'Desain website sangat kreatif, struktur HTML semantik sudah tepat!', '2026-10-20 10:00:00'),
 
     (10, 4, 105, 'c81e728d9d4c2f636f067f89cc14862c.pdf', 'Proyek_Web_Eko.pdf',
-     '2026-10-18 18:00:00', 'tepat_waktu', 98.00, 'Hebat! Tampilan responsif dan CSS styling sangat modern.', '2026-10-20 10:15:00');
+     '2026-10-18 18:00:00', 'tepat_waktu', 98.00, 'Hebat! Tampilan responsif dan CSS styling sangat modern.', '2026-10-20 10:15:00'),
+
+    (11, 7, 161, '36ad90198debe9d5e3148f4b782a718a.pdf', 'Tugas_Matriks_RaesaGista.pdf',
+     '2026-10-12 14:00:00', 'tepat_waktu', 100.00, 'Penyelesaian matriks transformasi sangat presisi dan sistematis. Analisis geometri sempurna!', '2026-10-14 09:00:00');
 
 -- =====================================================================
 -- PERPUSTAKAAN DIGITAL / E-BOOK
@@ -1523,7 +1530,9 @@ INSERT INTO `catatan_siswa` (`siswa_id`, `mapel_id`, `judul`, `isi`, `created_at
     (101, 4, 'Catatan Tiga Hukum Newton', '- Hukum I (Inersia): Benda diam tetap diam, benda bergerak tetap bergerak lurus beraturan jika resultan gaya = 0\n- Hukum II: F = m × a (Gaya = massa × percepatan)\n- Hukum III: Aksi = Reaksi, gaya selalu berpasangan', '2026-10-07 20:00:00', '2026-10-07 20:00:00'),
     (102, 2, 'Struktur Teks Laporan Hasil Observasi', 'Teks LHO:\n1. Pernyataan Umum / Definisi: pengenalan objek secara umum\n2. Deskripsi Bagian: penjabaran ciri-ciri bagian secara detail\n3. Deskripsi Manfaat: manfaat objek dalam kehidupan', '2026-10-06 18:00:00', '2026-10-06 18:00:00'),
     (105, 8, 'Cheat Sheet Dasar HTML & CSS', 'Tag penting HTML:\n<html>, <head>, <title>, <body>\n<h1> - <h6>: Heading\n<p>: Paragraf\n<a href="">: Hyperlink\n<img src="">: Gambar\n<ul>, <ol>, <li>: List\n<div>, <span>: Kontainer\n\nCSS Properties:\ncolor, background, font-family, margin, padding, border, display: flex', '2026-10-10 21:00:00', '2026-10-10 21:00:00'),
-    (121, 1, 'Rumus Identitas Trigonometri', 'sin θ = depan / miring\ncos θ = samping / miring\ntan θ = depan / samping\n\nIdentitas Utama:\nsin²θ + cos²θ = 1\n1 + tan²θ = sec²θ\n1 + cot²θ = csc²θ', '2026-10-13 20:30:00', '2026-10-15 19:00:00');
+    (121, 1, 'Rumus Identitas Trigonometri', 'sin θ = depan / miring\ncos θ = samping / miring\ntan θ = depan / samping\n\nIdentitas Utama:\nsin²θ + cos²θ = 1\n1 + tan²θ = sec²θ\n1 + cot²θ = csc²θ', '2026-10-13 20:30:00', '2026-10-15 19:00:00'),
+    (161, 1, 'Rumus Cepat Matriks & Transformasi Geometri', 'Matriks Rotasi R(θ) = [[cos θ, -sin θ], [sin θ, cos θ]].\nRefleksi terhadap garis y = x menukar koordinat (x, y) -> (y, x).\nRefleksi terhadap sumbu x: (x, -y); sumbu y: (-x, y).\nIngat urutan komposisi transformasi: T2 o T1 berarti T1 dikerjakan lebih dahulu baru kemudian T2.', '2026-09-10 14:00:00', '2026-10-25 16:30:00'),
+    (161, 4, 'Prinsip Dinamika Gerak & Analisis Vektor Bidang Miring', 'Komponen gaya pada bidang miring bersudut θ:\n1. Gaya berat sejajar bidang: w_parallel = m * g * sin(θ)\n2. Gaya normal tegak lurus bidang: N = m * g * cos(θ)\n3. Gaya gesek kinetis: f_k = μ_k * N\nPercepatan sistem jika licin: a = g * sin(θ). Jika kasar: a = g * (sin(θ) - μ_k * cos(θ)).', '2026-09-15 11:00:00', '2026-10-20 14:15:00');
 
 -- =====================================================================
 -- PENCAPAIAN / BADGE PRESTASI SISWA
@@ -1541,7 +1550,12 @@ INSERT INTO `pencapaian` (`siswa_id`, `tipe`, `label`, `deskripsi`, `ikon`, `dip
     (127, 'rajin_kuis',    'Rajin Latihan', 'Telah menyelesaikan 5 kuis dengan nilai memuaskan', '📝', '2026-10-20 11:00:00'),
     (141, 'tepat_waktu',   'Pengumpul Tepat Waktu', 'Mengumpulkan seluruh laporan praktikum tepat waktu', '⏰', '2026-10-17 09:15:00'),
     (141, 'nilai_sempurna', 'Nilai Sempurna', 'Mendapatkan nilai 100 pada kuis Fisika Modern XII-IPA', '💯', '2026-10-12 08:35:00'),
-    (143, 'rajin_kuis',    'Rajin Latihan', 'Telah mengerjakan seluruh kuis persiapan ujian', '📝', '2026-10-21 10:00:00');
+    (143, 'rajin_kuis',    'Rajin Latihan', 'Telah mengerjakan seluruh kuis persiapan ujian', '📝', '2026-10-21 10:00:00'),
+    (161, 'nilai_sempurna', 'Nilai Sempurna', 'Raih nilai sempurna 100 pada evaluasi tugas dan kuis', '💯', '2026-10-12 08:35:00'),
+    (161, 'tepat_waktu',   'Pengumpul Tepat Waktu', 'Seluruh tugas diserahkan sebelum batas tenggat waktu', '⏰', '2026-10-15 09:00:00'),
+    (161, 'rajin_kuis',    'Rajin Latihan', 'Menyelesaikan seluruh sesi latihan kuis tanpa terlewat', '📝', '2026-10-21 10:00:00'),
+    (161, 'peringkat_pertama', 'Bintang Kelas XII-IPA', 'Meraih peringkat pertama performa akademik kumulatif tertinggi', '⭐', '2026-10-15 10:00:00'),
+    (161, 'kehadiran_penuh', 'Disiplin Presensi 100%', 'Kehadiran konsisten 100% tanpa catatan alpa atau izin', '🎖️', '2026-11-02 08:00:00');
 
 -- =====================================================================
 -- GOOGLE MEET (SESI TATAP MUKA DARING)
